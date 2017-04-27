@@ -8,12 +8,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(QtWidgets.QMainWindow) :
-
-    def setupUi(self, MainWindow) :
+class Ui_MainWindow(object):
+    def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
-
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pick_button = QtWidgets.QPushButton(self.centralwidget)
@@ -44,24 +42,3 @@ class Ui_MainWindow(QtWidgets.QMainWindow) :
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pick_button.setText(_translate("MainWindow", "pick_image"))
 
-    def browse_folder(self) :
-        #directory = QtWidgets.QFileDialog.getExistingDirectory(self, "pick folder")
-        image_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "pick image")
-        #print(image_path)
-        self.upload_image(image_path)
-        return image_path
-
-
-    def upload_image(self, image_path) :
-        image = QtGui.QImage(image_path)
-        pixmap_raw = QtGui.QPixmap.fromImage(image)
-        pixmap_resize = pixmap_raw.scaled(self.Image_Viewer.size())
-        self.Image_Viewer.setPixmap(pixmap_resize)
-
-
-
-    def __init__(self) :
-        super().__init__()
-        self.MainWindow = QtWidgets.QMainWindow()
-        self.setupUi(self.MainWindow)
-        self.pick_button.clicked.connect(self.browse_folder)

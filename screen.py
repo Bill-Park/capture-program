@@ -2,25 +2,46 @@ import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QMainWindow
 #from PyQt5.QtGui import
 import test_ui
+import os
+import bill
+
+cap_dir = os.path.join('f:\\', 'blogging', 'capture')
+dir_id = bill.dir_id
 
 def pb_test() :
     print("pb test")
-'''
-class MainWindow(QDialog, screen_ui.Ui_MainWindow) :
-    def __init__(self, parent=None) :
-        super(MainWindow, self).__init__(parent)
-        self.setupUi(self)
-'''
+
+def copytoclipboard(text) :
+    command_copy = 'echo ' + text.strip() + ' | clip'
+    os.system(command_copy)
 
 if __name__ == '__main__' :
 
     app = QApplication(sys.argv)
-    m_window = QMainWindow()
-    #m_window.setWindowTitle("abc")
-    #m_window.show()
-    gui = test_ui.Ui_MainWindow(m_window)
+    gui = test_ui.Ui_MainWindow()
     gui.MainWindow.show()
-    gui.pushButton.clicked.connect(pb_test)
+
+    image_list = os.listdir(cap_dir)
+    pick_image = ""
+
+    if len(image_list) > 1 :
+        pick_image = gui.browse_folder()
+
+    else :
+        pick_image = os.path.join(cap_dir, image_list[0])
+
+    gui.upload_image(pick_image)
+    command_str = 'gdrive upload ' + pick_image + ' --share -p ' + dir_id
+    print(command_str)
+    system_echo = os.popen(command_str).read()
+    image_id = system_echo.split()[3]
+    base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
+    copytoclipboard(base_url)
+    gui.address_box.setText(base_url)
+    #gui.label.setText(base_url)
+
+    #os.remove(pick_image)
+
     sys.exit(app.exec_())
 
 

@@ -172,5 +172,5 @@ bin*/
 # for image or photo files
 *.jpg
 
-# test python file
-test.py
+# bill's own python file
+bill.py
