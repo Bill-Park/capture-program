@@ -34,12 +34,15 @@ if __name__ == '__main__' :
     command_str = 'gdrive upload ' + pick_image + ' --share -p ' + dir_id
     print(command_str)
     system_echo = os.popen(command_str).read()
-    image_id = system_echo.split()[3]
+    image_id = str(system_echo.split()[3])
     base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
-    copytoclipboard(base_url)
-    gui.address_box.setText(base_url)
-    #gui.label.setText(base_url)
+    shorten_url = bill.short_url(base_url)
+    print(shorten_url)
+    copytoclipboard(shorten_url)
+    gui.address_box.setText(shorten_url)
 
+    #gui.label.setText(base_url)
+    #https://goo.gl/3jvME3
     #os.remove(pick_image)
 
     sys.exit(app.exec_())
