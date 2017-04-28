@@ -55,9 +55,19 @@ class Ui_MainWindow(QtWidgets.QMainWindow) :
     def upload_image(self, image_path) :
         image = QtGui.QImage(image_path)
         pixmap_raw = QtGui.QPixmap.fromImage(image)
-        pixmap_resize = pixmap_raw.scaled(self.Image_Viewer.size())
-        self.Image_Viewer.setPixmap(pixmap_resize)
+        height_scale = self.Image_Viewer.height() / pixmap_raw.height() * 1.0
+        width_scale = self.Image_Viewer.width()/ pixmap_raw.width() * 1.0
 
+        view_scale = height_scale if height_scale < width_scale else width_scale
+        '''
+        if height_scale < width_scale :
+            view_scale = height_scale
+        else :
+            view_scale = width_scale
+        '''
+
+        pixmap_resize = pixmap_raw.scaled(round(pixmap_raw.width() * view_scale), round(pixmap_raw.height() * view_scale))
+        self.Image_Viewer.setPixmap(pixmap_resize)
 
 
     def __init__(self) :
