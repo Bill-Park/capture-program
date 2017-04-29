@@ -7,14 +7,14 @@
 # WARNING! All changes made in this file will be lost!
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+import os
 
-class Ui_MainWindow(QtWidgets.QMainWindow) :
-
-    def setupUi(self, MainWindow) :
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+#class Ui_MainWindow(QtWidgets.QMainWindow) :
+class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
+    def setupUi(self, Image_Viewer_2):
+        Image_Viewer_2.setObjectName("Image_Viewer_2")
+        Image_Viewer_2.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(Image_Viewer_2)
         self.centralwidget.setObjectName("centralwidget")
         self.pick_button = QtWidgets.QPushButton(self.centralwidget)
         self.pick_button.setGeometry(QtCore.QRect(5, 470, 75, 25))
@@ -27,26 +27,32 @@ class Ui_MainWindow(QtWidgets.QMainWindow) :
         self.Image_Viewer.setText("")
         self.Image_Viewer.setObjectName("Image_Viewer")
         self.address_box = QtWidgets.QLineEdit(self.centralwidget)
-        self.address_box.setGeometry(QtCore.QRect(90, 470, 450, 25))
+        self.address_box.setGeometry(QtCore.QRect(90, 470, 320, 25))
         self.address_box.setDragEnabled(True)
         self.address_box.setReadOnly(True)
         self.address_box.setObjectName("address_box")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.copy = QtWidgets.QPushButton(self.centralwidget)
+        self.copy.setGeometry(QtCore.QRect(415, 470, 50, 25))
+        self.copy.setObjectName("copy")
+        Image_Viewer_2.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(Image_Viewer_2)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        Image_Viewer_2.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(Image_Viewer_2)
+        QtCore.QMetaObject.connectSlotsByName(Image_Viewer_2)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, Image_Viewer_2):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pick_button.setText(_translate("MainWindow", "pick_image"))
+        Image_Viewer_2.setWindowTitle(_translate("Image_Viewer_2", "MainWindow"))
+        self.pick_button.setText(_translate("Image_Viewer_2", "pick_image"))
+        self.copy.setText(_translate("Image_Viewer_2", "copy"))
 
     def browse_folder(self) :
         #directory = QtWidgets.QFileDialog.getExistingDirectory(self, "pick folder")
-        image_path, _ = QtWidgets.QFileDialog.getOpenFileName(self, "pick image")
+        path_dialog = QtWidgets.QFileDialog()
+        QtWidgets.QFileDialog.setDirectory(path_dialog, os.path.join('f:\\', 'blogging', 'capture'))
+        image_path, _ = path_dialog.getOpenFileName(self, "pick image")
         #print(image_path)
         self.upload_image(image_path)
         return image_path

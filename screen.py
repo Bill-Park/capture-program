@@ -18,7 +18,7 @@ def copytoclipboard(text) :
 if __name__ == '__main__' :
 
     app = QApplication(sys.argv)
-    gui = test_ui.Ui_MainWindow()
+    gui = test_ui.Ui_Image_Viewer_2()
     gui.MainWindow.show()
 
     image_list = os.listdir(cap_dir)

@@ -8,11 +8,11 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 600)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class Ui_Image_Viewer_2(object):
+    def setupUi(self, Image_Viewer_2):
+        Image_Viewer_2.setObjectName("Image_Viewer_2")
+        Image_Viewer_2.resize(800, 600)
+        self.centralwidget = QtWidgets.QWidget(Image_Viewer_2)
         self.centralwidget.setObjectName("centralwidget")
         self.pick_button = QtWidgets.QPushButton(self.centralwidget)
         self.pick_button.setGeometry(QtCore.QRect(5, 470, 75, 25))
@@ -25,20 +25,24 @@ class Ui_MainWindow(object):
         self.Image_Viewer.setText("")
         self.Image_Viewer.setObjectName("Image_Viewer")
         self.address_box = QtWidgets.QLineEdit(self.centralwidget)
-        self.address_box.setGeometry(QtCore.QRect(90, 470, 450, 25))
+        self.address_box.setGeometry(QtCore.QRect(90, 470, 320, 25))
         self.address_box.setDragEnabled(True)
         self.address_box.setReadOnly(True)
         self.address_box.setObjectName("address_box")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.copy = QtWidgets.QPushButton(self.centralwidget)
+        self.copy.setGeometry(QtCore.QRect(415, 470, 50, 25))
+        self.copy.setObjectName("copy")
+        Image_Viewer_2.setCentralWidget(self.centralwidget)
+        self.statusbar = QtWidgets.QStatusBar(Image_Viewer_2)
         self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
+        Image_Viewer_2.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(Image_Viewer_2)
+        QtCore.QMetaObject.connectSlotsByName(Image_Viewer_2)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, Image_Viewer_2):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.pick_button.setText(_translate("MainWindow", "pick_image"))
+        Image_Viewer_2.setWindowTitle(_translate("Image_Viewer_2", "MainWindow"))
+        self.pick_button.setText(_translate("Image_Viewer_2", "pick_image"))
+        self.copy.setText(_translate("Image_Viewer_2", "copy"))
 

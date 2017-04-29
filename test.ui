@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>Image_Viewer_2</class>
+ <widget class="QMainWindow" name="Image_Viewer_2">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -54,7 +54,7 @@
      <rect>
       <x>90</x>
       <y>470</y>
-      <width>450</width>
+      <width>320</width>
       <height>25</height>
      </rect>
     </property>
@@ -63,6 +63,19 @@
     </property>
     <property name="readOnly">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="copy">
+    <property name="geometry">
+     <rect>
+      <x>415</x>
+      <y>470</y>
+      <width>50</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>copy</string>
     </property>
    </widget>
   </widget>
