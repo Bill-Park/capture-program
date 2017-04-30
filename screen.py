@@ -1,11 +1,11 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QDialog, QMainWindow
-#from PyQt5.QtGui import
+from PyQt5.QtWidgets import QApplication
 import test_ui
 import os
 import bill
 
-cap_dir = os.path.join('f:\\', 'blogging', 'capture')
+
+cap_dir = bill.cap_dir
 dir_id = bill.dir_id
 
 def pb_test() :
@@ -21,29 +21,19 @@ if __name__ == '__main__' :
     gui = test_ui.Ui_Image_Viewer_2()
     gui.MainWindow.show()
 
-    image_list = os.listdir(cap_dir)
-    pick_image = ""
+    pick_image = gui.select_image(bill.cap_dir)
+    if pick_image is not None :
+        command_str = 'gdrive upload ' + pick_image + ' --share -p ' + dir_id
+        print(command_str)
+        system_echo = os.popen(command_str).read()
+        image_id = str(system_echo.split()[3])
+        base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
+        shorten_url = bill.short_url(base_url)
+        print(shorten_url)
+        copytoclipboard(shorten_url)
+        gui.address_box.setText(shorten_url)
 
-    if len(image_list) > 1 :
-        pick_image = gui.browse_folder()
-
-    else :
-        pick_image = os.path.join(cap_dir, image_list[0])
-
-    gui.upload_image(pick_image)
-    command_str = 'gdrive upload ' + pick_image + ' --share -p ' + dir_id
-    print(command_str)
-    system_echo = os.popen(command_str).read()
-    image_id = str(system_echo.split()[3])
-    base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
-    shorten_url = bill.short_url(base_url)
-    print(shorten_url)
-    copytoclipboard(shorten_url)
-    gui.address_box.setText(shorten_url)
-
-    #gui.label.setText(base_url)
-    #https://goo.gl/3jvME3
-    #os.remove(pick_image)
+        os.remove(pick_image)
 
     sys.exit(app.exec_())
 

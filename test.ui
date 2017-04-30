@@ -65,7 +65,7 @@
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="copy">
+   <widget class="QPushButton" name="reload_button">
     <property name="geometry">
      <rect>
       <x>415</x>
@@ -75,7 +75,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>copy</string>
+     <string>reload</string>
     </property>
    </widget>
   </widget>

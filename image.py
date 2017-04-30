@@ -29,9 +29,9 @@ class Ui_Image_Viewer_2(object):
         self.address_box.setDragEnabled(True)
         self.address_box.setReadOnly(True)
         self.address_box.setObjectName("address_box")
-        self.copy = QtWidgets.QPushButton(self.centralwidget)
-        self.copy.setGeometry(QtCore.QRect(415, 470, 50, 25))
-        self.copy.setObjectName("copy")
+        self.reload_button = QtWidgets.QPushButton(self.centralwidget)
+        self.reload_button.setGeometry(QtCore.QRect(415, 470, 50, 25))
+        self.reload_button.setObjectName("reload_button")
         Image_Viewer_2.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(Image_Viewer_2)
         self.statusbar.setObjectName("statusbar")
@@ -44,5 +44,5 @@ class Ui_Image_Viewer_2(object):
         _translate = QtCore.QCoreApplication.translate
         Image_Viewer_2.setWindowTitle(_translate("Image_Viewer_2", "MainWindow"))
         self.pick_button.setText(_translate("Image_Viewer_2", "pick_image"))
-        self.copy.setText(_translate("Image_Viewer_2", "copy"))
+        self.reload_button.setText(_translate("Image_Viewer_2", "reload"))
 
