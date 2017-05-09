@@ -10,6 +10,10 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import bill
 
+def copytoclipboard(text) :
+    command_copy = 'echo ' + text.strip() + ' | clip'
+    os.system(command_copy)
+
 class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
     def setupUi(self, Image_Viewer_2):
         Image_Viewer_2.setObjectName("Image_Viewer_2")
@@ -56,6 +60,19 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         self.upload_image(image_path)
         return image_path
 
+    def get_url(self, image_path) :
+        if image_path is not None:
+            command_str = 'gdrive upload ' + image_path + ' --share -p ' + bill.dir_id
+            print(command_str)
+            system_echo = os.popen(command_str).read()
+            image_id = str(system_echo.split()[3])
+            base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
+            shorten_url = bill.short_url(base_url)
+            #print(shorten_url)
+            copytoclipboard(shorten_url)
+            self.address_box.setText(shorten_url)
+
+            os.remove(image_path)
 
     def upload_image(self, image_path) :
         image = QtGui.QImage(image_path)
@@ -86,6 +103,7 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
             return None
 
         self.upload_image(pick_image)
+        self.get_url(pick_image)
         return pick_image
 
 

@@ -22,18 +22,7 @@ if __name__ == '__main__' :
     gui.MainWindow.show()
 
     pick_image = gui.select_image(bill.cap_dir)
-    if pick_image is not None :
-        command_str = 'gdrive upload ' + pick_image + ' --share -p ' + dir_id
-        print(command_str)
-        system_echo = os.popen(command_str).read()
-        image_id = str(system_echo.split()[3])
-        base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
-        shorten_url = bill.short_url(base_url)
-        print(shorten_url)
-        copytoclipboard(shorten_url)
-        gui.address_box.setText(shorten_url)
 
-        os.remove(pick_image)
 
     sys.exit(app.exec_())
 
