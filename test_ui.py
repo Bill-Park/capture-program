@@ -9,6 +9,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import bill
+import quickstart
+import httplib2
+from apiclient import discovery
 
 def copytoclipboard(text) :
     command_copy = 'echo ' + text.strip() + ' | clip'
@@ -78,7 +81,7 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         image = QtGui.QImage(image_path)
         pixmap_raw = QtGui.QPixmap.fromImage(image)
         height_scale = self.Image_Viewer.height() / pixmap_raw.height() * 1.0
-        width_scale = self.Image_Viewer.width()/ pixmap_raw.width() * 1.0
+        width_scale = self.Image_Viewer.width() / pixmap_raw.width() * 1.0
 
         view_scale = height_scale if height_scale < width_scale else width_scale
         '''
@@ -87,9 +90,10 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         else :
             view_scale = width_scale
         '''
-
+        print("uploading")
         pixmap_resize = pixmap_raw.scaled(round(pixmap_raw.width() * view_scale), round(pixmap_raw.height() * view_scale))
         self.Image_Viewer.setPixmap(pixmap_resize)
+        print("upload end")
 
     def select_image(self, image_dir) :
         pick_image = ""
@@ -102,11 +106,17 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
             self.Image_Viewer.setText(" No Image")
             return None
 
-        self.upload_image(pick_image)
+        #self.upload_image(pick_image)
         self.get_url(pick_image)
         return pick_image
 
-
+    def drive_api(self) :
+        credentials = quickstart.get_credentials()
+        http = credentials.authorize(httplib2.Http())
+        service = discovery.build('drive', 'v3', http=http)
+        result = service.files().list(pageSize=50).execute()
+        items = result.get('files', [])
+        print(items)
 
     def __init__(self) :
         super().__init__()

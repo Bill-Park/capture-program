@@ -23,7 +23,6 @@ if __name__ == '__main__' :
 
     pick_image = gui.select_image(bill.cap_dir)
 
-
     sys.exit(app.exec_())
 
 
