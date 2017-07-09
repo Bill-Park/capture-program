@@ -71,6 +71,7 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         return image_path
 
     def get_url(self, image_path) :
+        start_time = time.time()
 
         if image_path is not None:
             image_id = save_gdrive.upload2drive(image_path, True)
@@ -82,6 +83,7 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
             self.address_box.setText(shorten_url)
 
             #os.remove(image_path)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
     def show_image(self, image_path) :
         image = QtGui.QImage(image_path)

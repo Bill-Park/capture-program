@@ -22,7 +22,7 @@ if not creds or creds.invalid:
     creds = tools.run_flow(flow, store, flags) \
             if flags else tools.run(flow, store)
 
-DRIVE = build('drive', 'v2', http=creds.authorize(Http()))
+DRIVE = build('drive', 'v3', http=creds.authorize(Http()))
 
 FILES = (
     ('hello.txt', False),
@@ -30,13 +30,16 @@ FILES = (
 
 def upload2drive(file_title, print_flag = False) :
     file_path = None
+    file_name = None
     if '\\' in file_title :
         file_path = file_title
+        file_name = file_title.split('\\')[-1]
     else :
         if isinstance(file_title, str) :
-            file_title = file_title.split('\\')[-1]
+            file_name = file_title
             file_path = os.path.join(bill.cap_dir, file_title)
     print(file_path)
+    '''
     metadata = {'title': file_title,
                 "parents": [{"id": bill.dir_id}],
                 }
@@ -44,8 +47,20 @@ def upload2drive(file_title, print_flag = False) :
     res = DRIVE.files().insert(body=metadata, media_body=file_path).execute()
     if res and print_flag :
         print('Uploaded "%s" (%s) id : %s' % (file_path, res['mimeType'], res['id']))
+    '''
+
+    metadata = {'name': file_name,
+                'parents': [{"id": bill.dir_id}],
+                'mimeType': None
+                }
+
+    res = DRIVE.files().create(body=metadata, media_body=file_name).execute()
+    if res:
+        print('Uploaded "%s" (%s)' % (file_name, res['mimeType']))
 
     return res['id']
+
+
 
 
 
