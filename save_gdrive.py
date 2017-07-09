@@ -1,31 +1,54 @@
+from __future__ import print_function
 import os
-import quickstart
-import httplib2
-from apiclient import discovery
-from apiclient import http
+import bill
 
+from googleapiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 
-def copytoclipboard(text) :
-    command_copy = 'echo ' + text.strip() + ' | clip'
-    os.system(command_copy)
-    print(command_copy)
+try :
+    import argparse
+    flags = argparse.ArgumentParser(parents=[tools.argparser]).parse_args()
+except ImportError:
+    flags = None
 
-def drive_api() :
-    credentials = quickstart.get_credentials()
-    http = credentials.authorize(httplib2.Http())
-    service = discovery.build('drive', 'v3', http=http)
-    result = service.files().list(pageSize=50).execute()
-    items = result.get('files', [])
-    for item in items :
-        print(item)
+SCOPES = 'https://www.googleapis.com/auth/drive.file'
+store = file.Storage('storage.json')
+creds = store.get()
 
-cap_dir = os.path.join('f:\\', 'blogging', 'capture')
-dir_id = '0B_CtpwiAk5hIWm9BXzVGU21yWEU'
+if not creds or creds.invalid:
+    flow = client.flow_from_clientsecrets('client_secret_drive.json', SCOPES)
+    creds = tools.run_flow(flow, store, flags) \
+            if flags else tools.run(flow, store)
 
-print(os.listdir(cap_dir))
+DRIVE = build('drive', 'v2', http=creds.authorize(Http()))
 
+FILES = (
+    ('hello.txt', False),
+)
+
+for filename, convert in FILES:
+    metadata = {'title': filename,
+                "parents": [{"id": bill.dir_id}],
+                }
+    #image_path = os.path.join(cap_dir, filename)
+    res = DRIVE.files().insert(body=metadata, media_body=filename).execute()
+    print(res['id'])
+    if res:
+        print('Uploaded "%s" (%s)' % (filename, res['mimeType']))
+'''
+if res:
+    MIMETYPE = 'application/pdf'
+    res, data = DRIVE._http.request(res['exportLinks'][MIMETYPE])
+    if data:
+        fn = '%s.pdf' % os.path.splitext(filename)[0]
+        with open(fn, 'wb') as fh:
+            fh.write(data)
+        print('Downloaded "%s" (%s)' % (fn, MIMETYPE))
+'''
+
+'''
 for image in os.listdir(cap_dir) :
-    '''
     image_dir = os.path.join(cap_dir, image)
     command_str = 'gdrive upload ' + image_dir + ' --share -p ' + dir_id
     print(command_str)
@@ -34,7 +57,4 @@ for image in os.listdir(cap_dir) :
     base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
     copytoclipboard(base_url)
     os.remove(image_dir)
-    '''
-    print(image)
-
-#print('end')
+'''

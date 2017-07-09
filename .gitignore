@@ -174,3 +174,4 @@ bin*/
 
 # bill's own python file
 bill.py
+*.json
