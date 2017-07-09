@@ -17,6 +17,7 @@ store = file.Storage('storage.json')
 creds = store.get()
 
 if not creds or creds.invalid:
+    print("make new storage data file ")
     flow = client.flow_from_clientsecrets('client_secret_drive.json', SCOPES)
     creds = tools.run_flow(flow, store, flags) \
             if flags else tools.run(flow, store)
@@ -27,15 +28,28 @@ FILES = (
     ('hello.txt', False),
 )
 
-for filename, convert in FILES:
-    metadata = {'title': filename,
+def upload2drive(file_title, print_flag = False) :
+    file_path = None
+    if '\\' in file_title :
+        file_path = file_title
+    else :
+        if isinstance(file_title, str) :
+            file_title = file_title.split('\\')[-1]
+            file_path = os.path.join(bill.cap_dir, file_title)
+    print(file_path)
+    metadata = {'title': file_title,
                 "parents": [{"id": bill.dir_id}],
                 }
-    #image_path = os.path.join(cap_dir, filename)
-    res = DRIVE.files().insert(body=metadata, media_body=filename).execute()
-    print(res['id'])
-    if res:
-        print('Uploaded "%s" (%s)' % (filename, res['mimeType']))
+
+    res = DRIVE.files().insert(body=metadata, media_body=file_path).execute()
+    if res and print_flag :
+        print('Uploaded "%s" (%s) id : %s' % (file_path, res['mimeType'], res['id']))
+
+    return res['id']
+
+
+
+
 '''
 if res:
     MIMETYPE = 'application/pdf'

@@ -12,7 +12,13 @@ import bill
 import quickstart
 import httplib2
 import save_gdrive
+import time
 from apiclient import discovery
+
+'''
+start_time = time.time()
+print("--- %s seconds ---" % (time.time() - start_time))
+'''
 
 def copytoclipboard(text) :
     command_copy = 'echo ' + text.strip() + ' | clip'
@@ -61,24 +67,23 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         path_dialog = QtWidgets.QFileDialog()
         QtWidgets.QFileDialog.setDirectory(path_dialog, os.path.join('f:\\', 'blogging', 'capture'))
         image_path, _ = path_dialog.getOpenFileName(self, "pick image")
-        self.upload_image(image_path)
+        self.show_image(image_path)
         return image_path
 
     def get_url(self, image_path) :
+
         if image_path is not None:
-            command_str = 'gdrive upload ' + image_path + ' --share -p ' + bill.dir_id
-            print(command_str)
-            system_echo = os.popen(command_str).read()
-            image_id = str(system_echo.split()[3])
-            base_url = 'https://drive.google.com/uc?id=' + image_id.strip()
+            image_id = save_gdrive.upload2drive(image_path, True)
+
+            base_url = 'https://drive.google.com/uc?id=' + image_id
             shorten_url = bill.short_url(base_url)
             #print(shorten_url)
             copytoclipboard(shorten_url)
             self.address_box.setText(shorten_url)
 
-            os.remove(image_path)
+            #os.remove(image_path)
 
-    def upload_image(self, image_path) :
+    def show_image(self, image_path) :
         image = QtGui.QImage(image_path)
         pixmap_raw = QtGui.QPixmap.fromImage(image)
         height_scale = self.Image_Viewer.height() / pixmap_raw.height() * 1.0
@@ -91,10 +96,8 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         else :
             view_scale = width_scale
         '''
-        print("uploading")
         pixmap_resize = pixmap_raw.scaled(round(pixmap_raw.width() * view_scale), round(pixmap_raw.height() * view_scale))
         self.Image_Viewer.setPixmap(pixmap_resize)
-        print("upload end")
 
     def select_image(self, image_dir) :
         pick_image = ""
@@ -110,14 +113,6 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         #self.upload_image(pick_image)
         self.get_url(pick_image)
         return pick_image
-
-    def drive_api(self) :
-        credentials = quickstart.get_credentials()
-        http = credentials.authorize(httplib2.Http())
-        service = discovery.build('drive', 'v3', http=http)
-        result = service.files().list(pageSize=50).execute()
-        items = result.get('files', [])
-        print(items)
 
     def __init__(self) :
         super().__init__()
