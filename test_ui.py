@@ -9,11 +9,9 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os
 import bill
-import quickstart
-import httplib2
 import save_gdrive
 import time
-from apiclient import discovery
+import sys
 
 '''
 start_time = time.time()
@@ -74,7 +72,7 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         start_time = time.time()
 
         if image_path is not None:
-            image_id = save_gdrive.upload2drive(image_path, True)
+            image_id = save_gdrive.upload2drive(image_path)
 
             base_url = 'https://drive.google.com/uc?id=' + image_id
             shorten_url = bill.short_url(base_url)
@@ -102,7 +100,6 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
         self.Image_Viewer.setPixmap(pixmap_resize)
 
     def select_image(self, image_dir) :
-        pick_image = ""
         image_list = os.listdir(image_dir)
         if len(image_list) > 1 :
             pick_image = self.browse_folder()
@@ -112,7 +109,6 @@ class Ui_Image_Viewer_2(QtWidgets.QMainWindow):
             self.Image_Viewer.setText(" No Image")
             return None
 
-        #self.upload_image(pick_image)
         self.get_url(pick_image)
         return pick_image
 
