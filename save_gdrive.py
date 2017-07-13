@@ -1,6 +1,7 @@
 from __future__ import print_function
 import os
 import bill
+import json
 
 from googleapiclient.discovery import build
 from httplib2 import Http
@@ -26,6 +27,9 @@ DRIVE = build('drive', 'v3', http=creds.authorize(Http()))
 
 
 def upload2drive(file_title) :
+
+
+
     file_path = None
     file_name = None
 
@@ -40,10 +44,13 @@ def upload2drive(file_title) :
 
     print(file_path)
 
-    metadata = {'name': file_name,
-                'parents': [bill.dir_id],
-                'mimeType': None
-                }
+    with open('owner_data.json') as json_file:
+        data = json.load(json_file)
+
+        metadata = {'name': file_name,
+                    'parents': [data['folder_id']],
+                    'mimeType': None
+                    }
     '''
     https: // drive.google.com / file / d / 0
     B_CtpwiAk5hIbkdfWmJvNUdabk0 / view?usp = sharing
@@ -80,8 +87,7 @@ def name2id(folder_name) :
 
     maked_folder = DRIVE.files().create(body=make_folder_metadata,
                                 fields='id').execute()
-
-    return maked_folder
+    return maked_folder['id']
 
     #query = "mimeType != 'application/vnd.google-apps.folder' and trashed = false and ('user1@test.org' in readers or 'group1@test.org' in readers) and fullText contains 'example string'"
     #puts
